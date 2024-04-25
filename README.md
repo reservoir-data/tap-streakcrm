@@ -61,6 +61,34 @@ See the [documentation](https://streak.readme.io/docs/authentication).
 
 You can easily run `tap-streakcrm` by itself or in a pipeline using [Meltano](https://meltano.com/).
 
+## Installation
+
+### In a Meltano project
+
+#### Using a direct reference
+
+```bash
+meltano add extractor tap-streakcrm --from-ref=https://raw.githubusercontent.com/reservoir-data/tap-streakcrm/main/plugin.yaml
+```
+
+Requires Meltano v3.1.0+.
+
+#### From MeltanoHub
+
+Not yet available.
+
+### From PyPI
+
+Not yet available.
+
+### With [pipx][pipx]
+
+```bash
+pipx install git+https://github.com/reservoir-data/tap-streakcrm.git@main
+```
+
+[pipx]: https://github.com/pypa/pipx
+
 ### Executing the Tap Directly
 
 ```bash
