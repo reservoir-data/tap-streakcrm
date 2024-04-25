@@ -11,8 +11,8 @@ description = "`tap-streakcrm` is a Singer tap for Streak CRM, built with the Me
 readme = "README.md"
 keywords = [
   "ELT",
-  "Streak CRM",
   "singer.io",
+  "Streak CRM",
 ]
 license.file = "LICENSE"
 maintainers = [{ name = "Edgar Ramírez-Mondragón",  email = "edgarrm358@gmail.com" }]

@@ -7,9 +7,6 @@ import typing as t
 from requests.auth import HTTPBasicAuth
 from singer_sdk import RESTStream
 
-if t.TYPE_CHECKING:
-    from requests import Response
-
 
 class StreakCRMStream(RESTStream[t.Any]):
     """Streak CRM stream class."""
