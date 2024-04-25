@@ -1,0 +1,23 @@
+# Changes here will be overwritten by Copier
+_commit: v0.1.5
+_src_path: gh:edgarrmondragon/singer-tap-copier-template
+author_email: edgarrm358@gmail.com
+author_fullname: Edgar Ramírez-Mondragón
+author_username: edgarrmondragon
+dependabot_update_time: '10:00'
+dependabot_update_timezone: Etc/UTC
+python_main_version: '3.12'
+repository_name: tap-streakcrm
+repository_namespace: edgarrmondragon
+repository_provider: github.com
+repository_visibility: private
+tap_auth_method: Basic Auth
+tap_id: tap-streakcrm
+tap_package_command_line_name: tap-streakcrm
+tap_package_distribution_name: tap-streakcrm
+tap_package_import_name: tap_streakcrm
+tap_source_description: CRM built into GMail
+tap_source_id: StreakCRM
+tap_source_name: Streak CRM
+tap_stream_type: REST
+vscode_files: true
