@@ -53,9 +53,7 @@ jobs:
 
     - name: Run tests
       env:
-        TAP_STREAKCRM_USERNAME: ${{ secrets.TAP_STREAKCRM_USERNAME }}
-        TAP_STREAKCRM_PASSWORD: ${{ secrets.TAP_STREAKCRM_PASSWORD }}
-        TAP_STREAKCRM_START_DATE: ${{ secrets.TAP_STREAKCRM_START_DATE }}
+        TAP_STREAKCRM_API_KEY: ${{ secrets.TAP_STREAKCRM_API_KEY }}
       run: |
         hatch run ${{ matrix.script }}
 
