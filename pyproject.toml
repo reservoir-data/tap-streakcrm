@@ -35,7 +35,7 @@ dynamic = [
 ]
 dependencies = [
   "requests<3,>=2",
-  "singer-sdk~=0.38.0a2",
+  "singer-sdk~=0.39.0a1",
 ]
 optional-dependencies.dev = [
   "tap-streakcrm[testing,typing]",
