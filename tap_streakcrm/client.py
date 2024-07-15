@@ -33,7 +33,7 @@ class StreakCRMStream(RESTStream[t.Any]):
 
     def get_url_params(
         self,
-        context: dict[str, t.Any] | None,  # noqa: ARG002
+        context: t.Mapping[str, t.Any] | None,  # noqa: ARG002
         next_page_token: t.Any | None,  # noqa: ARG002, ANN401
     ) -> dict[str, t.Any]:
         """Get URL query parameters.
