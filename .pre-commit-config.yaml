@@ -1,5 +1,5 @@
 ci:
-  autofix_commit_msg: '[pre-commit.ci] auto fixes'
+  autofix_commit_msg: 'chore: pre-commit.ci auto fixes'
   autofix_prs: true
   autoupdate_schedule: monthly
   autoupdate_commit_msg: 'chore(deps): pre-commit autoupdate'
@@ -37,5 +37,8 @@ repos:
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.30.0
     hooks:
-    - id: check-dependabot
     - id: check-github-workflows
+    - id: check-renovate
+      language: python
+      additional_dependencies:
+      - pyjson5==1.6.8
