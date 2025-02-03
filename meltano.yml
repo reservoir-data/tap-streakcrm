@@ -7,19 +7,18 @@ environments:
 plugins:
   extractors:
   - name: tap-streakcrm
-    label: Streak CRM
     namespace: streakcrm
-    description: CRM built into GMail
-    repository: https://github.com/edgarrmondragon/tap-streakcrm
+    label: Streak CRM
     docs: https://github.com/edgarrmondragon/tap-streakcrm#readme
     pip_url: -e .
+    description: CRM built into GMail
     capabilities:
     - state
     - catalog
     - discover
     settings:
     - name: api_key
-      kind: password
+      kind: string
       label: API Key
       description: Streak API Key
       sensitive: true
@@ -28,8 +27,11 @@ plugins:
       label: Start Date
       description: Earliest datetime to get data from
     config:
-      start_date: "2024-04-24"
+      start_date: '2024-04-24'
+    repository: https://github.com/edgarrmondragon/tap-streakcrm
   loaders:
   - name: target-jsonl
     variant: andyh1203
     pip_url: target-jsonl
+venv:
+  backend: uv
