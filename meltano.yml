@@ -28,7 +28,7 @@ plugins:
       description: Earliest datetime to get data from
     config:
       start_date: '2024-04-24'
-    repository: https://github.com/edgarrmondragon/tap-streakcrm
+    repo: https://github.com/edgarrmondragon/tap-streakcrm
   loaders:
   - name: target-jsonl
     variant: andyh1203
