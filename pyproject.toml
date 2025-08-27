@@ -37,9 +37,9 @@ dependencies = [
   "requests>=2,<3",
   "singer-sdk~=0.47.1",
 ]
-urls.Documentation = "https://github.com/edgarrmondragon/tap-streakcrm#readme"
-urls.Homepage = "https://github.com/edgarrmondragon/tap-streakcrm"
-urls.Repository = "https://github.com/edgarrmondragon/tap-streakcrm"
+urls.Documentation = "https://github.com/reservoir-data/tap-streakcrm#readme"
+urls.Homepage = "https://github.com/reservoir-data/tap-streakcrm"
+urls.Repository = "https://github.com/reservoir-data/tap-streakcrm"
 scripts."tap-streakcrm" = "tap_streakcrm.tap:TapStreakCRM.cli"
 
 [dependency-groups]
