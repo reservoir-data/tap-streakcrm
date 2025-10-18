@@ -36,6 +36,7 @@ dynamic = [
 dependencies = [
   "requests>=2,<3",
   "singer-sdk~=0.50.2",
+  "typing-extensions>=4.15; python_full_version<'3.12'",
 ]
 urls.Documentation = "https://github.com/reservoir-data/tap-streakcrm#readme"
 urls.Homepage = "https://github.com/reservoir-data/tap-streakcrm"
@@ -55,13 +56,14 @@ testing = [
 typing = [
   "mypy",
   "types-requests",
+  "typing-extensions",
 ]
 
 [tool.hatch.version]
 source = "vcs"
 
 [tool.ruff]
-line-length = 88
+line-length = 100
 
 lint.select = [
   "ALL",
