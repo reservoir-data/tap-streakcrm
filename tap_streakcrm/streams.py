@@ -2,9 +2,33 @@
 
 from __future__ import annotations
 
+import sys
+from typing import TYPE_CHECKING, Any, cast
+
+from requests.auth import HTTPBasicAuth
+from singer_sdk import RESTStream
 from singer_sdk import typing as th
 
-from tap_streakcrm.client import StreakCRMStream
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from singer_sdk.helpers.types import Context, Record
+
+
+class StreakCRMStream(RESTStream[Any]):
+    """Streak CRM stream class."""
+
+    url_base = "https://api.streak.com/api"
+
+    @override
+    @property
+    def authenticator(self) -> HTTPBasicAuth:
+        return HTTPBasicAuth(self.config["api_key"], "")
 
 
 class Teams(StreakCRMStream):
@@ -52,4 +76,105 @@ class Teams(StreakCRMStream):
         ),
         th.Property("hasStripeCustomer", th.BooleanType),
         th.Property("lastSavedTimestamp", th.IntegerType),
+        th.Property(
+            "contactOrgListPermissions",
+            th.ObjectType(
+                additional_properties=th.ObjectType(
+                    th.Property("aclEntries", th.ArrayType(th.ObjectType())),
+                ),
+            ),
+        ),
     ).to_dict()
+
+
+class Pipelines(StreakCRMStream):
+    """Pipelines stream."""
+
+    name = "pipelines"
+    path = "/v1/pipelines"
+    primary_keys = ("key",)
+    records_jsonpath = "$[*]"
+    replication_key = None
+
+    schema = th.PropertiesList(
+        th.Property(
+            "creatorKey",
+            th.StringType,
+            description="The user key of the user that created the pipeline",
+        ),
+        th.Property("name", th.StringType, description="The name of this pipeline"),
+        th.Property(
+            "teamWide",
+            th.BooleanType,
+            description="Whether this pipeline is shared with all users in the organization (same domain in email address)",  # noqa: E501
+        ),
+        th.Property(
+            "fields",
+            th.ArrayType(
+                th.ObjectType(
+                    th.Property("name", th.StringType),
+                    th.Property("key", th.StringType),
+                    th.Property("type", th.StringType),
+                )
+            ),
+            description="Describes what fields each box within the pipeline can have",
+        ),
+        th.Property(
+            "stages",
+            th.ObjectType(
+                additional_properties=th.ObjectType(
+                    th.Property("name", th.StringType),
+                    th.Property("key", th.StringType),
+                ),
+            ),
+            description="A map describing the set of possible stages a box within the pipeline can be in",  # noqa: E501
+        ),
+        th.Property(
+            "stageOrder",
+            th.ArrayType(th.StringType),
+            description="Editable array which allows you to reorder the stages. This modifies the order of the stages that appear in the web UI.",  # noqa: E501
+        ),
+        th.Property("creationTimestamp", th.IntegerType),
+        th.Property("lastUpdatedTimestamp", th.IntegerType),
+        th.Property(
+            "aclEntries",
+            th.ArrayType(
+                th.ObjectType(
+                    th.Property("fullName", th.StringType),
+                    th.Property("email", th.StringType),
+                    th.Property("isOwner", th.BooleanType),
+                    th.Property("image", th.StringType),
+                )
+            ),
+            description="An array of ACL objects (with properties: fullName, email, isOwner, image) which determines a list of users who have access to this pipeline.",  # noqa: E501
+        ),
+        th.Property("pipelineKey", th.StringType),
+        th.Property(
+            "owner",
+            th.ObjectType(
+                th.Property("email", th.StringType),
+                th.Property("isOwner", th.BooleanType),
+            ),
+        ),
+        th.Property("key", th.StringType),
+    ).to_dict()
+
+    @override
+    def get_url_params(
+        self,
+        context: Context | None = None,
+        next_page_token: Any | None = None,
+    ) -> dict[str, Any]:
+        """Get URL parameters for the stream."""
+        params = cast("dict[str, Any]", super().get_url_params(context, next_page_token))
+        params["sortBy"] = "lastUpdatedTime"
+        return params
+
+    @override
+    def generate_child_contexts(
+        self,
+        record: Record,
+        context: Context | None = None,
+    ) -> Iterable[Context | None]:
+        """Generate child contexts for each record."""
+        yield {"pipelineKey": record["pipelineKey"]}

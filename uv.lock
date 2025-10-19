@@ -871,6 +871,7 @@ source = { editable = "." }
 dependencies = [
     { name = "requests" },
     { name = "singer-sdk" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
 ]
 
 [package.dev-dependencies]
@@ -880,6 +881,7 @@ dev = [
     { name = "pytest" },
     { name = "singer-sdk", extra = ["testing"] },
     { name = "types-requests" },
+    { name = "typing-extensions" },
 ]
 testing = [
     { name = "deptry" },
@@ -889,12 +891,14 @@ testing = [
 typing = [
     { name = "mypy" },
     { name = "types-requests" },
+    { name = "typing-extensions" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "requests", specifier = ">=2,<3" },
     { name = "singer-sdk", specifier = "~=0.50.2" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'", specifier = ">=4.15.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -904,6 +908,7 @@ dev = [
     { name = "pytest", specifier = ">=8" },
     { name = "singer-sdk", extras = ["testing"] },
     { name = "types-requests" },
+    { name = "typing-extensions" },
 ]
 testing = [
     { name = "deptry", specifier = ">=0.12" },
@@ -913,6 +918,7 @@ testing = [
 typing = [
     { name = "mypy" },
     { name = "types-requests" },
+    { name = "typing-extensions" },
 ]
 
 [[package]]

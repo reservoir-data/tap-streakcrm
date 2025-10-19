@@ -45,6 +45,10 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 A full list of supported settings and capabilities is available by running: `tap-streakcrm --about`
 
+### Source Authentication and Authorization
+
+See the [documentation](https://streak.readme.io/docs/authentication).
+
 ## Supported Python Versions
 
 * 3.10
@@ -52,14 +56,6 @@ A full list of supported settings and capabilities is available by running: `tap
 * 3.12
 * 3.13
 * 3.14
-
-### Source Authentication and Authorization
-
-See the [documentation](https://streak.readme.io/docs/authentication).
-
-## Usage
-
-You can easily run `tap-streakcrm` by itself or in a pipeline using [Meltano](https://meltano.com/).
 
 ## Installation
 
@@ -88,6 +84,10 @@ uv tool install git+https://github.com/reservoir-data/tap-streakcrm.git@main
 ```
 
 [uv]: https://docs.astral.sh/uv/
+
+## Usage
+
+You can easily run `tap-polarsh` by itself or in a pipeline using [Meltano](https://meltano.com/).
 
 ### Executing the Tap Directly
 
