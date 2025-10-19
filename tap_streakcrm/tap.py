@@ -45,4 +45,5 @@ class TapStreakCRM(Tap):
         return [
             streams.Teams(tap=self),
             streams.Pipelines(tap=self),
+            streams.Boxes(tap=self),
         ]
