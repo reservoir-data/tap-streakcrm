@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import sys
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from requests.auth import HTTPBasicAuth
 from singer_sdk import RESTStream
 from singer_sdk import typing as th
+from singer_sdk.pagination import BasePageNumberPaginator
 
 if sys.version_info >= (3, 12):
     from typing import override
@@ -20,7 +21,10 @@ if TYPE_CHECKING:
     from singer_sdk.helpers.types import Context, Record
 
 
-class StreakCRMStream(RESTStream[Any]):
+_T = TypeVar("_T")
+
+
+class StreakCRMStream(RESTStream[_T]):
     """Streak CRM stream class."""
 
     url_base = "https://api.streak.com/api"
@@ -30,8 +34,12 @@ class StreakCRMStream(RESTStream[Any]):
     def authenticator(self) -> HTTPBasicAuth:
         return HTTPBasicAuth(self.config["api_key"], "")
 
+    @override
+    def get_url_params(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
+        return {}
 
-class Teams(StreakCRMStream):
+
+class Teams(StreakCRMStream[Any]):
     """Teams stream."""
 
     name = "teams"
@@ -87,7 +95,7 @@ class Teams(StreakCRMStream):
     ).to_dict()
 
 
-class Pipelines(StreakCRMStream):
+class Pipelines(StreakCRMStream[Any]):
     """Pipelines stream."""
 
     name = "pipelines"
@@ -162,11 +170,11 @@ class Pipelines(StreakCRMStream):
     @override
     def get_url_params(
         self,
-        context: Context | None = None,
+        context: Context | None,
         next_page_token: Any | None = None,
     ) -> dict[str, Any]:
         """Get URL parameters for the stream."""
-        params = cast("dict[str, Any]", super().get_url_params(context, next_page_token))
+        params = super().get_url_params(context, next_page_token)
         params["sortBy"] = "lastUpdatedTime"
         return params
 
@@ -178,3 +186,67 @@ class Pipelines(StreakCRMStream):
     ) -> Iterable[Context | None]:
         """Generate child contexts for each record."""
         yield {"pipelineKey": record["pipelineKey"]}
+
+
+class Boxes(StreakCRMStream[int]):
+    """Boxes stream."""
+
+    name = "boxes"
+    path = "/v1/pipelines/{pipelineKey}/boxes"
+    primary_keys = ("key",)
+    records_jsonpath = "$[*]"
+    replication_key = None
+
+    _page_size = 100
+
+    parent_stream_type = Pipelines
+
+    schema = th.PropertiesList(
+        th.Property("pipelineKey", th.StringType),
+        th.Property("creatorKey", th.StringType),
+        th.Property("creationTimestamp", th.IntegerType),
+        th.Property("lastUpdatedTimestamp", th.IntegerType),
+        th.Property("name", th.StringType),
+        th.Property("notes", th.StringType),
+        th.Property("stageKey", th.StringType),
+        th.Property("fields", th.ObjectType()),
+        th.Property("followerKeys", th.ArrayType(th.StringType)),
+        th.Property("followerCount", th.IntegerType),
+        th.Property("commentCount", th.IntegerType),
+        th.Property("taskTotal", th.IntegerType),
+        th.Property("gmailThreadCount", th.IntegerType),
+        th.Property("fileCount", th.IntegerType),
+        th.Property("boxKey", th.StringType),
+        th.Property("key", th.StringType),
+    ).to_dict()
+
+    @override
+    def get_new_paginator(self) -> BasePageNumberPaginator | None:
+        # Pages are 0 indexed
+        return BasePageNumberPaginator(start_value=0)
+
+    @override
+    def get_url_params(
+        self,
+        context: Context | None,
+        next_page_token: int | None = None,
+    ) -> dict[str, Any]:
+        """Get URL parameters for the stream."""
+        params = super().get_url_params(context, next_page_token)
+        params.update(
+            {
+                "limit": self._page_size,
+                "sortBy": "lastUpdatedTime",
+            },
+        )
+        if next_page_token is not None:
+            params["page"] = next_page_token
+        return params
+
+    @override
+    def generate_child_contexts(
+        self,
+        record: Record,
+        context: Context | None = None,
+    ) -> Iterable[Context | None]:
+        yield {"boxKey": record["boxKey"]}
