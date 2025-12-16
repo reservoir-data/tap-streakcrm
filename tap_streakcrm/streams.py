@@ -2,18 +2,12 @@
 
 from __future__ import annotations
 
-import sys
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, override
 
 from requests.auth import HTTPBasicAuth
 from singer_sdk import RESTStream
 from singer_sdk import typing as th
 from singer_sdk.pagination import BasePageNumberPaginator
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override
 
 if TYPE_CHECKING:
     from collections.abc import Iterable

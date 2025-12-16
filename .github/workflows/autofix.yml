@@ -1,0 +1,38 @@
+name: autofix.ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_COLOR: 1
+  # renovate: datasource=pypi depName=prek
+  PREK_VERSION: 0.2.19
+  # renovate: datasource=pypi depName=uv
+  UV_VERSION: 0.9.13
+
+jobs:
+  pre-commit:
+    name: pre-commit
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+
+    - name: Install the latest version of uv
+      uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+      with:
+        version: ${{ env.UV_VERSION }}
+
+    - run: >
+        uvx
+        --with prek==${{ env.PREK_VERSION }}
+        prek run --show-diff-on-failure --all-files
+
+    - uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27 # v1.3.2

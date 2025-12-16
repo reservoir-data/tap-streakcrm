@@ -7,7 +7,7 @@ requires = [
 
 [project]
 name = "tap-streakcrm"
-description = "`tap-streakcrm` is a Singer tap for Streak CRM, built with the Meltano SDK for Singer Taps."
+description = "Singer tap for Streak CRM, built with the Meltano SDK."
 readme = "README.md"
 keywords = [
   "ELT",
@@ -21,11 +21,9 @@ maintainers = [
 authors = [
   { name = "Edgar Ramírez-Mondragón", email = "edgarrm358@gmail.com" },
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -36,7 +34,6 @@ dynamic = [
 dependencies = [
   "requests>=2,<3",
   "singer-sdk~=0.53.2",
-  "typing-extensions>=4.15; python_full_version<'3.12'",
 ]
 urls.Documentation = "https://github.com/reservoir-data/tap-streakcrm#readme"
 urls.Homepage = "https://github.com/reservoir-data/tap-streakcrm"
@@ -50,11 +47,12 @@ dev = [
 ]
 testing = [
   "deptry>=0.12",
-  "pytest>=8",
+  "pytest>=9",
   "singer-sdk[testing]",
 ]
 typing = [
   "mypy",
+  "ty>=0.0.1a35",
   "types-requests",
   "typing-extensions",
 ]
@@ -115,8 +113,6 @@ env_list = [
   "3.14",
   "3.13",
   "3.12",
-  "3.11",
-  "3.10",
 ]
 
 [tool.tox.env_run_base]
@@ -131,7 +127,10 @@ commands = [ [ "deptry", "." ] ]
 
 [tool.tox.env.typing]
 dependency_groups = [ "testing", "typing" ]
-commands = [ [ "mypy", "--strict", { replace = "posargs", default = [ "tap_streakcrm", "tests" ], extend = true } ] ]
+commands = [
+  [ "mypy", "--strict", { replace = "posargs", default = [ "tap_streakcrm", "tests" ], extend = true } ],
+  [ "ty", "check", { replace = "posargs", default = [ "tap_streakcrm", "tests" ], extend = true } ],
+]
 
 [tool.mypy]
 enable_error_code = [
@@ -139,7 +138,6 @@ enable_error_code = [
   "redundant-expr",
   "truthy-bool",
 ]
-python_version = "3.12"
 warn_redundant_casts = true
 warn_return_any = true
 warn_no_return = true
