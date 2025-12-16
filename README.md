@@ -1,25 +1,52 @@
-# `tap-streakcrm`
+<div align="center">
+
+# tap-streakcrm
+
+<div>
+  <a href="https://github.com/reservoir-data/tap-streakcrm/blob/main/LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/reservoir-data/tap-streakcrm"/>
+  </a>
+  <a href="https://scientific-python.org/specs/spec-0000/">
+    <img alt="SPEC 0 — Minimum Supported Dependencies" src="https://img.shields.io/badge/SPEC-0-green"/>
+  </a>
+  <a href="https://github.com/astral-sh/ruff">
+    <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff" style="max-width:100%;">
+  </a>
+  <a href="https://github.com/astral-sh/uv">
+   <img alt="uv" src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json"/>
+  </a>
+</div>
 
 Singer tap for [Streak CRM](https://www.streak.com).
 
 Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
+</div>
+
 ## Capabilities
 
-* `catalog`
-* `state`
-* `discover`
-* `about`
-* `stream-maps`
-* `schema-flattening`
-* `batch`
+- `catalog`
+- `state`
+- `discover`
+- `activate-version`
+- `about`
+- `stream-maps`
+- `schema-flattening`
+- `batch`
+- `structured-logging`
+
+## Supported Python Versions
+
+- 3.12
+- 3.13
+- 3.14
 
 ## Settings
 
-| Setting                           | Required | Default | Description                                                                                                                                                                                                                                              |
-| :-------------------------------- | :------- | :------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| api_key                           | True     | None    | API key in Streak                                                                                                                                                                                                                                        |
-| start_date                        | False    | None    | Earliest datetime to get data from                                                                                                                                                                                                                       |
+| Setting    | Required | Default | Description                        |
+| :--------- | :------- | :------ | :--------------------------------- |
+| api_key    | True     | None    | API key in Streak                  |
+| start_date | False    | None    | Earliest datetime to get data from |
 
 <details>
 <summary>Built-in Singer SDK Settings</summary>
@@ -48,14 +75,6 @@ A full list of supported settings and capabilities is available by running: `tap
 ### Source Authentication and Authorization
 
 See the [documentation](https://streak.readme.io/docs/authentication).
-
-## Supported Python Versions
-
-* 3.10
-* 3.11
-* 3.12
-* 3.13
-* 3.14
 
 ## Installation
 
@@ -87,7 +106,7 @@ uv tool install git+https://github.com/reservoir-data/tap-streakcrm.git@main
 
 ## Usage
 
-You can easily run `tap-polarsh` by itself or in a pipeline using [Meltano](https://meltano.com/).
+You can easily run `tap-streakcrm` by itself or in a pipeline using [Meltano](https://meltano.com/).
 
 ### Executing the Tap Directly
 

@@ -7,16 +7,13 @@ on:
       - tap_streakcrm/**
       - tests/**
       - pyproject.toml
-      - tox.ini
       - uv.lock
       - .github/workflows/test.yml
   pull_request:
-    branches: [main]
     paths:
       - tap_streakcrm/**
       - tests/**
       - pyproject.toml
-      - tox.ini
       - uv.lock
       - .github/workflows/test.yml
   workflow_dispatch:
@@ -30,8 +27,6 @@ concurrency:
 
 env:
   FORCE_COLOR: 1
-  # renovate: datasource=pypi depName=prek
-  PREK_VERSION: 0.2.19
   # renovate: datasource=pypi depName=uv
   UV_VERSION: 0.9.13
   # renovate: datasource=pypi depName=tox
@@ -47,14 +42,9 @@ jobs:
       matrix:
         script: ["test:integration"]
         python-version:
-        - "3.10"
-        - "3.11"
         - "3.12"
         - "3.13"
         - "3.14"
-        include:
-        - { environment: "dependencies", python-version: "3.x" }
-        - { environment: "typing",       python-version: "3.x" }
 
     steps:
     - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
@@ -74,19 +64,22 @@ jobs:
         uvx
         --with tox-uv==${{ env.TOX_UV_VERSION }}
         --with tox==${{ env.TOX_VERSION }}
-        tox -e ${{ matrix.environment || matrix.python-version }}
+        tox -e ${{ matrix.python-version }}
 
-  pre-commit:
+  static-analysis:
+    name: Static analysis
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
-
-    - name: Install the latest version of uv
-      uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+    - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+      id: setup-python
+    - uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
       with:
         version: ${{ env.UV_VERSION }}
-
-    - run: >
-        uvx
-        --with prek==${{ env.PREK_VERSION }}
-        prek run --show-diff-on-failure --all-files
+    - env:
+        UV_PYTHON: ${{ steps.setup-python.outputs.python-path }}
+      run: uv tool install --with tox-uv==${{ env.TOX_UV_VERSION }} --from tox==${{ env.TOX_VERSION }} tox
+    - name: Static type checking
+      run: tox -e typing
+    - name: Unused, missing and transitive dependencies
+      run: tox -e dependencies
