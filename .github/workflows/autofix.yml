@@ -30,7 +30,8 @@ jobs:
       with:
         version: ${{ env.UV_VERSION }}
 
-    - run: >
+    - continue-on-error: true
+      run: >
         uvx
         --with prek==${{ env.PREK_VERSION }}
         prek run --show-diff-on-failure --all-files
