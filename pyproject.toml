@@ -33,7 +33,7 @@ dynamic = [
 ]
 dependencies = [
   "requests>=2,<3",
-  "singer-sdk~=0.53.2",
+  "singer-sdk~=0.54.0a3",
 ]
 urls.Documentation = "https://github.com/reservoir-data/tap-streakcrm#readme"
 urls.Homepage = "https://github.com/reservoir-data/tap-streakcrm"
@@ -57,17 +57,16 @@ typing = [
   "typing-extensions",
 ]
 
-[tool.hatch.version]
-source = "vcs"
+[tool.hatch]
+version.source = "vcs"
 
 [tool.uv]
+required-version = ">=0.5.19"
 prerelease = "allow"
 preview = true
-required-version = ">=0.5.19"
 
 [tool.ruff]
 line-length = 100
-
 lint.select = [
   "ALL",
 ]
@@ -95,15 +94,15 @@ lint.isort.required-imports = [
 ]
 lint.pydocstyle.convention = "google"
 
-[tool.deptry.package_module_name_map]
-mypy = "mypy"
-types-requests = "requests"
+[tool.deptry]
+package_module_name_map.mypy = "mypy"
+package_module_name_map.types-requests = "requests"
 
 [tool.pyproject-fmt]
 max_supported_python = "3.14"
 
-[tool.pytest.ini_options]
-addopts = [ "-vvv" ]
+[tool.pytest]
+ini_options.addopts = [ "-vvv" ]
 
 [tool.tox]
 min_version = "4.22"
@@ -114,23 +113,17 @@ env_list = [
   "3.13",
   "3.12",
 ]
-
-[tool.tox.env.dependencies]
-dependency_groups = [ "testing" ]
-commands = [ [ "deptry", "." ] ]
-
-[tool.tox.env.typing]
-dependency_groups = [ "testing", "typing" ]
-commands = [
+env.dependencies.dependency_groups = [ "testing" ]
+env.dependencies.commands = [ [ "deptry", "." ] ]
+env.typing.dependency_groups = [ "testing", "typing" ]
+env.typing.commands = [
   [ "mypy", "--strict", { replace = "posargs", default = [ "tap_streakcrm", "tests" ], extend = true } ],
   [ "ty", "check", { replace = "posargs", default = [ "tap_streakcrm", "tests" ], extend = true } ],
 ]
-
-[tool.tox.env_run_base]
-runner = "uv-venv-lock-runner"
-pass_env = [ "TAP_STREAKCRM_*" ]
-dependency_groups = [ "testing" ]
-commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
+env_run_base.runner = "uv-venv-lock-runner"
+env_run_base.pass_env = [ "TAP_STREAKCRM_*" ]
+env_run_base.dependency_groups = [ "testing" ]
+env_run_base.commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
 
 [tool.mypy]
 enable_error_code = [
