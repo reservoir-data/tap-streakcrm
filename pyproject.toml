@@ -33,7 +33,7 @@ dynamic = [
 ]
 dependencies = [
   "requests>=2,<3",
-  "singer-sdk~=0.53.2",
+  "singer-sdk~=0.54.0a3",
 ]
 urls.Documentation = "https://github.com/reservoir-data/tap-streakcrm#readme"
 urls.Homepage = "https://github.com/reservoir-data/tap-streakcrm"
