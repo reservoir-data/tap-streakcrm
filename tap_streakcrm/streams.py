@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, TypeVar, override
 from requests.auth import HTTPBasicAuth
 from singer_sdk import RESTStream
 from singer_sdk import typing as th
-from singer_sdk.pagination import BasePageNumberPaginator
+from singer_sdk.pagination import PageNumberPaginator
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -215,9 +215,9 @@ class Boxes(StreakCRMStream[int]):
     ).to_dict()
 
     @override
-    def get_new_paginator(self) -> BasePageNumberPaginator | None:
+    def get_new_paginator(self) -> PageNumberPaginator | None:
         # Pages are 0 indexed
-        return BasePageNumberPaginator(start_value=0)
+        return PageNumberPaginator(start_value=0)
 
     @override
     def get_url_params(

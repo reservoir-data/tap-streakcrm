@@ -4,6 +4,13 @@ on:
   push:
     tags: ["*"]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build wheel and sdist
@@ -14,6 +21,8 @@ jobs:
       package_version: ${{ steps.baipp.outputs.package_version }}
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        persist-credentials: false
     - uses: hynek/build-and-inspect-python-package@efb823f52190ad02594531168b7a2d5790e66516 # v2.14.0
       id: baipp
 
@@ -25,18 +34,11 @@ jobs:
       name: pypi
       url: https://pypi.org/project/tap-streakcrm/${{ needs.build.outputs.package_version }}
     permissions:
-      contents: write
-      id-token: write
+      id-token: write  # Needed for OIDC PyPI publishing
 
     steps:
     - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
       with:
         name: Packages
         path: dist
-    - uses: svenstaro/upload-release-action@b98a3b12e86552593f3e4e577ca8a62aa2f3f22b # 2.11.4
-      with:
-        file: dist/*.whl
-        tag: ${{ github.ref }}
-        overwrite: true
-        file_glob: true
     - uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0

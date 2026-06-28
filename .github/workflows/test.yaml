@@ -31,11 +31,11 @@ concurrency:
 env:
   FORCE_COLOR: 1
   # renovate: datasource=pypi depName=uv
-  UV_VERSION: 0.10.7
+  UV_VERSION: 0.11.25
   # renovate: datasource=pypi depName=tox
-  TOX_VERSION: 4.46.3
+  TOX_VERSION: 4.56.1
   # renovate: datasource=pypi depName=tox-uv
-  TOX_UV_VERSION: 1.33.0
+  TOX_UV_VERSION: 1.35.2
 
 jobs:
   build-package:
@@ -62,6 +62,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        persist-credentials: false
     - uses: astral-sh/setup-uv@5a095e7a2014a4212f075830d4f7277575a9d098 # v7.3.1
       with:
         python-version: ${{ matrix.python-version }}
@@ -69,25 +71,28 @@ jobs:
     - name: Run tests
       env:
         TAP_STREAKCRM_API_KEY: ${{ secrets.TAP_STREAKCRM_API_KEY }}
+        MATRIX_PYTHON_VERSION: ${{ matrix.python-version }}
       run: >
         uvx
-        --with tox-uv==${{ env.TOX_UV_VERSION }}
-        --with tox==${{ env.TOX_VERSION }}
-        tox -e ${{ matrix.python-version }}
+        --with tox-uv=="${TOX_UV_VERSION}"
+        --with tox=="${TOX_VERSION}"
+        tox -e "${MATRIX_PYTHON_VERSION}"
 
   static:
     name: Static analysis
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        persist-credentials: false
     - uses: astral-sh/setup-uv@5a095e7a2014a4212f075830d4f7277575a9d098 # v7.3.1
       with:
         version: ${{ env.UV_VERSION }}
     - run: >
         uv tool install
         --managed-python
-        --with tox-uv==${{ env.TOX_UV_VERSION }}
-        --from tox==${{ env.TOX_VERSION }}
+        --with tox-uv=="${TOX_UV_VERSION}"
+        --from tox=="${TOX_VERSION}"
         tox
     - name: Static type checking
       run: tox -e typing
