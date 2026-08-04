@@ -40,6 +40,7 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 - 3.12
 - 3.13
 - 3.14
+- 3.15
 
 ## Settings
 
