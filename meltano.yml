@@ -1,4 +1,4 @@
-version: 1
+requires_meltano: '>=4.2'
 send_anonymous_usage_stats: false
 project_id: tap-streakcrm
 default_environment: dev
@@ -16,6 +16,7 @@ plugins:
     - state
     - catalog
     - discover
+    - structured-logging
     settings:
     - name: api_key
       kind: string
